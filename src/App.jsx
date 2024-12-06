@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <Header />
-      <main className="flex-1">
+      <main className="my-8 flex-1">
         <Outlet />
       </main>
       <Footer />

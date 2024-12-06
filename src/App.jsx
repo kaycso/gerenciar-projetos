@@ -1,13 +1,15 @@
 import { Outlet } from "react-router";
-import Navbar from "./components/NavBar";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <>
-      <Navbar />
-      <main>
+      <Header />
+      <main className="flex-1">
         <Outlet />
       </main>
+      <Footer />
     </>
   );
 }

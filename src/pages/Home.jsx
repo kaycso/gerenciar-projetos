@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import savings from "../assets/images/savings.svg";
+import Button from "../components/ui/Button";
 
 const Home = () => {
   return (
@@ -14,11 +15,8 @@ const Home = () => {
             Comece a gerenciar seus projetos agora mesmo!
           </p>
         </div>
-        <Link
-          to="/newproject"
-          className="rounded-lg bg-zinc-900 px-4 py-2 text-lg font-bold text-white transition hover:text-amber-400"
-        >
-          Criar Projeto
+        <Link to="/newproject">
+          <Button>Criar Projeto</Button>
         </Link>
       </div>
       <div className="">

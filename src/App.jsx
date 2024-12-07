@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <Header />
-      <main className="my-8 flex-1">
+      <main className="py-8 flex-1 bg-slate-50">
         <Outlet />
       </main>
       <Footer />

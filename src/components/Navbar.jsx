@@ -16,6 +16,11 @@ const Navbar = () => {
           </NavLink>
         </li>
         <li>
+          <NavLink to="/projects" className={isActiveLink}>
+            Projetos
+          </NavLink>
+        </li>
+        <li>
           <NavLink to="/contact" className={isActiveLink}>
             Contato
           </NavLink>
@@ -23,11 +28,6 @@ const Navbar = () => {
         <li>
           <NavLink to="/company" className={isActiveLink}>
             Empresa
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/newproject" className={isActiveLink}>
-            Novo Projeto
           </NavLink>
         </li>
       </ul>

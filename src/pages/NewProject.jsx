@@ -13,10 +13,14 @@ const NewProject = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(project)
+      body: JSON.stringify(project),
     })
       .then((resp) => resp.json())
-      .then((data) => navigate("/projects"))
+      .then((data) =>
+        navigate("/projects", {
+          state: { notification: "Projeto criado com sucesso!" },
+        }),
+      )
       .catch((err) => console.log(err));
   };
 

@@ -1,10 +1,20 @@
 import { useEffect, useState } from "react";
 import ProjectCard from "../components/ProjectCard";
 import Button from "../components/ui/Button";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
+import Notification from "../components/Notification";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
+  const location = useLocation();
+  const [notification, setNotification] = useState(null);
+
+  useEffect(() => {
+    if (location.state && location.state.notification) {
+      setNotification(location.state.notification);
+      setTimeout(() => setNotification(null), 5000);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     fetch("http://localhost:5000/projects", {
@@ -19,24 +29,27 @@ const Projects = () => {
   }, []);
 
   return (
-    <section className="mx-12 flex flex-col gap-6">
-      <div className="flex justify-between">
-        <h1 className="text-4xl font-bold">Meus Projetos</h1>
-        <Link to="/newproject">
-          <Button>Criar Projeto</Button>
-        </Link>
-      </div>
-      <div className="flex flex-wrap gap-4 rounded">
-        {projects.map((project) => (
-          <ProjectCard
-            key={project.id}
-            name={project.name}
-            budget={project.budget}
-            category={project.category}
-          />
-        ))}
-      </div>
-    </section>
+    <>
+      {notification && <Notification msg={notification} />}
+      <section className="mx-12 flex flex-col gap-6">
+        <div className="flex justify-between">
+          <h1 className="text-4xl font-bold">Meus Projetos</h1>
+          <Link to="/newproject">
+            <Button>Criar Projeto</Button>
+          </Link>
+        </div>
+        <div className="flex flex-wrap gap-4 rounded">
+          {projects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              name={project.name}
+              budget={project.budget}
+              category={project.category}
+            />
+          ))}
+        </div>
+      </section>
+    </>
   );
 };
 

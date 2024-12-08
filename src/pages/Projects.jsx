@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import ProjectCard from "../components/ProjectCard";
 import Button from "../components/ui/Button";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import Notification from "../components/Notification";
 import Loading from "../components/Loading";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const location = useLocation();
+  const navigate = useNavigate();
   const [notification, setNotification] = useState(null);
   const [removeLoading, setRemoveLoading] = useState(false);
 
   useEffect(() => {
     if (location.state && location.state.notification) {
       setNotification(location.state.notification);
-      setTimeout(() => setNotification(null), 5000);
+      setTimeout(() => {
+        setNotification(null);
+        navigate("/projects", { replace: true, state: {} });
+      }, 5000);
     }
   }, [location.state]);
 

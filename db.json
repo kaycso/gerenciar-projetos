@@ -1,20 +1,45 @@
 {
-  "projects": [],
+  "projects": [
+    {
+      "id": "eaf7",
+      "name": "Primeiro teste",
+      "budget": 10,
+      "category": "1",
+      "cost": 0,
+      "services": []
+    },
+    {
+      "id": "e061",
+      "category": "Desenvolvimento",
+      "name": "Segundo Teste",
+      "budget": 2000,
+      "cost": 0,
+      "services": []
+    },
+    {
+      "id": "839d",
+      "category": "Infra",
+      "name": "terceiro teste",
+      "budget": 3,
+      "cost": 0,
+      "services": []
+    }
+  ],
   "categories": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Infra"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Desenvolvimento"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Design"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Planejamento"
     }
   ]

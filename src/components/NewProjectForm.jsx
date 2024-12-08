@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import FormField from "./FormField";
 import Button from "./ui/Button";
 
-const NewProjectForm = () => {
+const NewProjectForm = ({ handleSubmit }) => {
   const [projectName, setProjectName] = useState("");
   const [budget, setBudget] = useState("");
   const [category, setCategory] = useState("");
   const [categories, setCategories] = useState([]);
+  const [project, setProject] = useState({});
 
   useEffect(() => {
     fetch("http://localhost:5000/categories", {
@@ -22,33 +24,57 @@ const NewProjectForm = () => {
       .catch((err) => console.error(err));
   }, []);
 
+  const submit = (e) => {
+    e.preventDefault();
+    if (!projectName || !budget || !category) {
+      alert("Todos os campos devem ser preenchidos!");
+      return;
+    }
+    handleSubmit(project);
+  };
+
   return (
-    <form action="" className="flex flex-col gap-4">
+    <form onSubmit={submit} className="flex flex-col gap-4">
       <FormField
         id="projectName"
         label="Nome"
         type="text"
         placeholder="Insira o nome do projeto"
         value={projectName}
-        onChange={(e) => setProjectName(e.target.value)}
+        onChange={(e) => {
+          const name = e.target.value;
+          setProjectName(name);
+          setProject((props) => ({ ...props, name }));
+        }}
       />
       <FormField
         id="budget"
         label="Orçamento"
-        type="text"
+        type="number"
         placeholder="Insira o orçamento total"
         value={budget}
-        onChange={(e) => setBudget(e.target.value)}
+        onChange={(e) => {
+          const budget = e.target.value;
+          setBudget(budget);
+          setProject((props) => ({
+            ...props,
+            budget: parseFloat(budget) || 0,
+          }));
+        }}
       />
       <FormField
         id="category"
         label="Categoria"
         type="select"
         value={category}
-        onChange={(e) => setCategory(e.target.value)}
+        onChange={(e) => {
+          const category = e.target.value;
+          setCategory(category);
+          setProject((props) => ({ ...props, category: category }));
+        }}
       >
         {categories.map((cat) => (
-          <option key={cat.id} value={cat.id}>
+          <option key={cat.id} value={cat.name}>
             {cat.name}
           </option>
         ))}
@@ -56,6 +82,10 @@ const NewProjectForm = () => {
       <Button type="submit">Criar Projeto</Button>
     </form>
   );
+};
+
+NewProjectForm.propTypes = {
+  handleSubmit: PropTypes.func,
 };
 
 export default NewProjectForm;

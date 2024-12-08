@@ -3,11 +3,13 @@ import ProjectCard from "../components/ProjectCard";
 import Button from "../components/ui/Button";
 import { Link, useLocation } from "react-router";
 import Notification from "../components/Notification";
+import Loading from "../components/Loading";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const location = useLocation();
   const [notification, setNotification] = useState(null);
+  const [removeLoading, setRemoveLoading] = useState(false);
 
   useEffect(() => {
     if (location.state && location.state.notification) {
@@ -24,7 +26,10 @@ const Projects = () => {
       },
     })
       .then((resp) => resp.json())
-      .then((data) => setProjects(data))
+      .then((data) => {
+        setProjects(data);
+        setRemoveLoading(true);
+      })
       .catch((err) => console.log(err));
   }, []);
 
@@ -39,14 +44,20 @@ const Projects = () => {
           </Link>
         </div>
         <div className="flex flex-wrap gap-4 rounded">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              name={project.name}
-              budget={project.budget}
-              category={project.category}
-            />
-          ))}
+          {projects.length > 0 ? (
+            projects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                id={project.id}
+                name={project.name}
+                budget={project.budget}
+                category={project.category}
+              />
+            ))
+          ) : (
+            <p>Não há nenhum projeto cadastrado</p>
+          )}
+          {!removeLoading && <Loading />}
         </div>
       </section>
     </>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FormField from "./FormField";
 import Button from "./ui/Button";
 
@@ -6,6 +6,21 @@ const NewProjectForm = () => {
   const [projectName, setProjectName] = useState("");
   const [budget, setBudget] = useState("");
   const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/categories", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        setCategories(data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
   return (
     <form action="" className="flex flex-col gap-4">
@@ -32,10 +47,11 @@ const NewProjectForm = () => {
         value={category}
         onChange={(e) => setCategory(e.target.value)}
       >
-        <option value="Infra">Infra</option>
-        <option value="Desenvolvimento">Desenvolvimento</option>
-        <option value="Design">Design</option>
-        <option value="Planejamento">Planejamento</option>
+        {categories.map((cat) => (
+          <option key={cat.id} value={cat.id}>
+            {cat.name}
+          </option>
+        ))}
       </FormField>
       <Button type="submit">Criar Projeto</Button>
     </form>

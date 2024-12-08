@@ -33,6 +33,22 @@ const Projects = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const removeProject = (id) => {
+    fetch(`http://localhost:5000/projects/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        setProjects(projects.filter((project) => project.id !== id));
+        setNotification("Projeto Removido com Sucesso!");
+        setTimeout(() => setNotification(null), 5000);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <>
       {notification && <Notification msg={notification} />}
@@ -52,6 +68,7 @@ const Projects = () => {
                 name={project.name}
                 budget={project.budget}
                 category={project.category}
+                handleRemove={removeProject}
               />
             ))
           ) : (

@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
 
-const Input = ({ id, type = "text", placeholder, value, onChange }) => {
+const Input = ({ id, type = "text", placeholder, value, onChange, name }) => {
   return (
     <input
       id={id}
+      name={name}
       type={type}
       className="rounded border border-zinc-400 px-2 py-1"
       placeholder={placeholder}
@@ -19,6 +20,7 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func,
+  name: PropTypes.string,
 };
 
 export default Input;

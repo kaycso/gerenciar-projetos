@@ -4,6 +4,7 @@ import Select from "./ui/Select";
 
 const FormField = ({
   id,
+  name,
   label,
   type,
   placeholder,
@@ -17,7 +18,7 @@ const FormField = ({
         {label}
       </label>
       {type === "select" ? (
-        <Select id={id} onChange={onChange} value={value}>
+        <Select id={id} name={name} onChange={onChange} value={value}>
           {children}
         </Select>
       ) : (
@@ -27,6 +28,7 @@ const FormField = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          name={name}
         />
       )}
     </div>
@@ -35,6 +37,7 @@ const FormField = ({
 
 FormField.propTypes = {
   id: PropTypes.string,
+  name: PropTypes.string,
   label: PropTypes.node,
   type: PropTypes.string,
   placeholder: PropTypes.string,

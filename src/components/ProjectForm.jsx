@@ -8,6 +8,8 @@ const ProjectForm = ({ projectInfo, handleSubmit, buttonText }) => {
     name: projectInfo?.name || "",
     budget: projectInfo?.budget || "",
     category: projectInfo?.category || "",
+    cost: projectInfo?.cost || 0,
+    services: projectInfo?.services || []
   });
   const [categories, setCategories] = useState([]);
 

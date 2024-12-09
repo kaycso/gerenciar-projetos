@@ -1,42 +1,42 @@
 {
   "projects": [
     {
-      "id": "eaf7",
       "name": "Primeiro teste",
-      "budget": 10,
-      "category": "1",
-      "cost": 0,
-      "services": []
-    },
-    {
-      "id": "e061",
-      "category": "Desenvolvimento",
-      "name": "Segundo Test",
-      "budget": 2000,
-      "cost": 0,
-      "services": []
-    },
-    {
-      "id": "839d",
+      "budget": 3000,
       "category": "Infra",
-      "name": "terceiro teste",
-      "budget": 3,
-      "cost": 0,
-      "services": []
+      "cost": 3000,
+      "services": [
+        {
+          "name": "teste serviço",
+          "cost": 2000,
+          "description": "teste descrição"
+        },
+        {
+          "name": "teste serviço dois",
+          "cost": 1000,
+          "description": "teste descrição 3"
+        }
+      ],
+      "id": "5d26"
     },
     {
-      "id": "87d3",
-      "name": "Quarto teste (notificação)",
-      "budget": 9,
-      "category": "Infra",
-      "cost": 0,
-      "services": []
-    },
-    {
-      "name": "Quinto teste",
+      "name": "Segundo Teste",
       "budget": 20000,
       "category": "Desenvolvimento",
-      "id": "2c64"
+      "cost": 3000,
+      "services": [
+        {
+          "name": "teste serviço",
+          "cost": 2000,
+          "description": "teste descrição"
+        },
+        {
+          "name": "teste serviço 3",
+          "cost": 1000,
+          "description": "descrição"
+        }
+      ],
+      "id": "419c"
     }
   ],
   "categories": [

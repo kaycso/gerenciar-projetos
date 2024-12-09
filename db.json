@@ -1,42 +1,49 @@
 {
   "projects": [
     {
+      "id": "2f2c",
       "name": "Primeiro teste",
-      "budget": 3000,
+      "budget": 20000,
       "category": "Infra",
-      "cost": 3000,
+      "cost": 2000,
       "services": [
         {
-          "name": "teste serviço",
+          "name": "teste 1",
           "cost": 2000,
-          "description": "teste descrição"
-        },
-        {
-          "name": "teste serviço dois",
-          "cost": 1000,
-          "description": "teste descrição 3"
+          "description": "descrição",
+          "id": "32fc2254-5bae-4044-a3bd-0eea899f753e"
         }
-      ],
-      "id": "5d26"
+      ]
     },
     {
-      "name": "Segundo Teste",
-      "budget": 20000,
+      "id": "f8d0",
+      "name": "terceiro teste",
+      "budget": 30000,
       "category": "Desenvolvimento",
-      "cost": 3000,
+      "cost": 2000,
       "services": [
         {
-          "name": "teste serviço",
+          "name": "Teste Nome",
           "cost": 2000,
-          "description": "teste descrição"
-        },
-        {
-          "name": "teste serviço 3",
-          "cost": 1000,
-          "description": "descrição"
+          "description": "descrição do serviço",
+          "id": "fd2d7afb-3abb-4f8b-9bc4-383302e9343e"
         }
-      ],
-      "id": "419c"
+      ]
+    },
+    {
+      "id": "bab4",
+      "name": "Segundo Test",
+      "budget": 20000,
+      "category": "Design",
+      "cost": 22,
+      "services": [
+        {
+          "name": "teste 1",
+          "cost": 22,
+          "description": "descrição um pouco maior para teste",
+          "id": "c762a2d0-4cb3-4210-8707-07f17d5517f6"
+        }
+      ]
     }
   ],
   "categories": [

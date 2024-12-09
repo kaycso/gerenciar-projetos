@@ -5,6 +5,8 @@ import Loading from "../components/Loading";
 import ProjectForm from "../components/ProjectForm";
 import ServiceForm from "../components/ServiceForm";
 import Notification from "../components/Notification";
+import ServiceCard from "../components/ServiceCard";
+import { v4 as uuidv4 } from "uuid";
 
 const Project = () => {
   const { id } = useParams();
@@ -67,6 +69,7 @@ const Project = () => {
   const addNewService = (service) => {
     const updatedService = {
       ...service,
+      id: uuidv4(),
       cost: Number(service.cost),
     };
 
@@ -96,6 +99,30 @@ const Project = () => {
           state: { notification: "Projeto atualizado com sucesso!" },
         });
         toggleServiceForm();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const removeService = (service) => {
+    const updatedServices = project.services.filter((s) => s.id !== service.id);
+    const updatedCost = project.cost - service.cost;
+
+    fetch(`http://localhost:5000/projects/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...project,
+        services: updatedServices,
+        cost: updatedCost,
+      }),
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        setProject(data);
+        setNotification("Serviço Removido com Sucesso!");
+        setTimeout(() => setNotification(null), 3500);
       })
       .catch((err) => console.log(err));
   };
@@ -138,10 +165,9 @@ const Project = () => {
           />
         )}
 
-        {/* Criar componente AddNewService */}
         <div className="flex flex-col gap-4 border-b-2 pb-4">
           <div className="flex justify-between">
-            <h2 className="text-2xl font-bold">Adicione um serviço:</h2>
+            <h2 className="text-3xl font-bold">Adicione um serviço</h2>
             <Button onClick={toggleServiceForm} className="text-base">
               {!showServiceForm ? "Adicionar Serviço" : "Fechar"}
             </Button>
@@ -154,13 +180,26 @@ const Project = () => {
           )}
         </div>
 
-        {/* Criar componente Services */}
-        <div>
-          {project.services === 0 ? (
-            <p>teste</p>
-          ) : (
-            <p>Não há serviços cadastrados.</p>
-          )}
+        <div className="flex flex-col gap-4">
+          <div>
+            <h2 className="text-3xl font-bold">Serviços</h2>
+          </div>
+          <div className="flex gap-2">
+            {project.services && project.services.length > 0 ? (
+              project.services.map((service) => (
+                <ServiceCard
+                  key={service.id}
+                  name={service.name}
+                  cost={service.cost}
+                  description={service.description}
+                  id={service.id}
+                  handleRemove={() => removeService(service)}
+                />
+              ))
+            ) : (
+              <p>Não há serviços cadastrados.</p>
+            )}
+          </div>
         </div>
       </section>
     </>

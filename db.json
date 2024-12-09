@@ -11,7 +11,7 @@
     {
       "id": "e061",
       "category": "Desenvolvimento",
-      "name": "Segundo Teste",
+      "name": "Segundo Test",
       "budget": 2000,
       "cost": 0,
       "services": []
@@ -33,12 +33,10 @@
       "services": []
     },
     {
-      "id": "8a29",
       "name": "Quinto teste",
-      "budget": 2,
-      "category": "Infra",
-      "cost": 0,
-      "services": []
+      "budget": 20000,
+      "category": "Desenvolvimento",
+      "id": "2c64"
     }
   ],
   "categories": [

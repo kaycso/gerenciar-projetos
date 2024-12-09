@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import NewProjectForm from "../components/NewProjectForm";
+import ProjectForm from "../components/ProjectForm";
 
 const NewProject = () => {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const NewProject = () => {
             Crie seu projeto para adicionar os serviços
           </p>
         </div>
-        <NewProjectForm handleSubmit={createPost} />
+        <ProjectForm handleSubmit={createPost} buttonText="Criar Projeto" />
       </div>
     </div>
   );

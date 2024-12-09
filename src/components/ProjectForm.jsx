@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import FormField from "./FormField";
 import Button from "./ui/Button";
+import PropTypes from "prop-types";
 
-const NewProjectForm = ({ handleSubmit }) => {
-  const [projectName, setProjectName] = useState("");
-  const [budget, setBudget] = useState("");
-  const [category, setCategory] = useState("");
+const ProjectForm = ({ projectInfo, handleSubmit, buttonText }) => {
+  const [project, setProject] = useState({
+    name: projectInfo?.name || "",
+    budget: projectInfo?.budget || "",
+    category: projectInfo?.category || "",
+  });
   const [categories, setCategories] = useState([]);
-  const [project, setProject] = useState({});
 
   useEffect(() => {
     fetch("http://localhost:5000/categories", {
@@ -26,7 +27,7 @@ const NewProjectForm = ({ handleSubmit }) => {
 
   const submit = (e) => {
     e.preventDefault();
-    if (!projectName || !budget || !category) {
+    if (!project.name || !project.budget || !project.category) {
       alert("Todos os campos devem ser preenchidos!");
       return;
     }
@@ -37,14 +38,15 @@ const NewProjectForm = ({ handleSubmit }) => {
     <form onSubmit={submit} className="flex flex-col gap-4">
       <FormField
         id="projectName"
-        label="Nome"
+        label="Nome do Projeto"
         type="text"
         placeholder="Insira o nome do projeto"
-        value={projectName}
+        value={project.name}
         onChange={(e) => {
-          const name = e.target.value;
-          setProjectName(name);
-          setProject((props) => ({ ...props, name }));
+          setProject((prevProject) => ({
+            ...prevProject,
+            name: e.target.value,
+          }));
         }}
       />
       <FormField
@@ -52,13 +54,11 @@ const NewProjectForm = ({ handleSubmit }) => {
         label="Orçamento"
         type="number"
         placeholder="Insira o orçamento total"
-        value={budget}
+        value={project.budget}
         onChange={(e) => {
-          const budget = e.target.value;
-          setBudget(budget);
-          setProject((props) => ({
-            ...props,
-            budget: parseFloat(budget) || 0,
+          setProject((prevProject) => ({
+            ...prevProject,
+            budget: Number(e.target.value),
           }));
         }}
       />
@@ -66,11 +66,12 @@ const NewProjectForm = ({ handleSubmit }) => {
         id="category"
         label="Categoria"
         type="select"
-        value={category}
+        value={project.category}
         onChange={(e) => {
-          const category = e.target.value;
-          setCategory(category);
-          setProject((props) => ({ ...props, category: category }));
+          setProject((prevProject) => ({
+            ...prevProject,
+            category: e.target.value,
+          }));
         }}
       >
         {categories.map((cat) => (
@@ -79,13 +80,15 @@ const NewProjectForm = ({ handleSubmit }) => {
           </option>
         ))}
       </FormField>
-      <Button type="submit">Criar Projeto</Button>
+      <Button type="submit">{buttonText}</Button>
     </form>
   );
 };
 
-NewProjectForm.propTypes = {
+ProjectForm.propTypes = {
+  projectInfo: PropTypes.object,
   handleSubmit: PropTypes.func,
+  buttonText: PropTypes.string,
 };
 
-export default NewProjectForm;
+export default ProjectForm;

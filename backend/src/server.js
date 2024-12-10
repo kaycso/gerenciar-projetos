@@ -1,3 +1,8 @@
 import app from "./app.js";
+import dotenv from "dotenv";
 
-app.listen(3333, () => console.log("Server runing on port 3333"));
+dotenv.config();
+
+const PORT = process.env.PORT || 3333;
+
+app.listen(PORT, () => console.log(`Server runing on port ${PORT}`));

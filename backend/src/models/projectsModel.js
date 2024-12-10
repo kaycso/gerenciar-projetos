@@ -7,4 +7,15 @@ const getAll = async () => {
   return projects;
 };
 
-export { getAll };
+const createProject = async (createProject) => {
+  const sql = connectToDatabase();
+  const { title, budget, category_id } = createProject;
+
+  const createdProject = await sql`
+    INSERT INTO projects(title, budget, category_id) VALUES (${title}, ${budget}, ${category_id})
+  `;
+
+  return createdProject;
+};
+
+export { getAll, createProject };

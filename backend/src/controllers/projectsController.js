@@ -1,6 +1,9 @@
-import { getAll as getAllProjects } from "../models/projectsModel.js";
+import {
+  getAll as getAllProjects,
+  createProject as createProjectModel,
+} from "../models/projectsModel.js";
 
-const getAll = async (req, res) => {
+const getAll = async (_req, res) => {
   try {
     const projects = await getAllProjects();
     res.status(200).json(projects);
@@ -9,4 +12,14 @@ const getAll = async (req, res) => {
   }
 };
 
-export { getAll };
+const createProject = async (req, res) => {
+  try {
+    const project = req.body;
+    const createdProject = await createProjectModel(project);
+    res.status(201).json(createdProject);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export { getAll, createProject };

@@ -6,7 +6,10 @@ import {
   updateProject,
 } from "./controllers/projectsController.js";
 import { getAll as getAllCategories } from "./controllers/categoriesController.js";
-import { createService } from "./controllers/servicesController.js";
+import {
+  createService,
+  updateService,
+} from "./controllers/servicesController.js";
 
 const router = express.Router();
 
@@ -21,5 +24,7 @@ router.put("/projects/:id", updateProject);
 router.get("/categories", getAllCategories);
 
 router.post("/services", createService);
+
+router.put("/services/:id", updateService);
 
 export default router;

@@ -43,7 +43,7 @@ const updateProject = async (req, res) => {
     const project = req.body;
     const updatedProject = await updateProjectModel(id, project);
 
-    res.status(201).json(updatedProject);
+    res.status(200).json(updatedProject);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

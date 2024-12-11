@@ -2,6 +2,7 @@ import {
   getAll as getAllProjects,
   createProject as createProjectModel,
   getProject as getProjectModel,
+  updateProject as updateProjectModel,
 } from "../models/projectsModel.js";
 
 const getAll = async (_req, res) => {
@@ -36,4 +37,16 @@ const getProject = async (req, res) => {
   }
 };
 
-export { getAll, createProject, getProject };
+const updateProject = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const project = req.body;
+    const updatedProject = await updateProjectModel(id, project);
+
+    res.status(201).json(updatedProject);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export { getAll, createProject, getProject, updateProject };

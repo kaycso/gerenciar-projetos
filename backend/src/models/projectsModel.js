@@ -30,4 +30,17 @@ const getProject = async (id) => {
   return project;
 };
 
-export { getAll, createProject, getProject };
+const updateProject = async (id, project) => {
+  const sql = connectToDatabase()
+  const { title, budget, category_id } = project
+  const updatedProject = await sql`
+    UPDATE projects
+    SET title = ${title}, budget = ${budget}, category_id = ${category_id}
+    WHERE id = ${id}
+    RETURNING *
+  `
+  
+  return updatedProject
+}
+
+export { getAll, createProject, getProject, updateProject };

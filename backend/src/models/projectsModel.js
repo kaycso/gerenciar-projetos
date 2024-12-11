@@ -18,4 +18,16 @@ const createProject = async (createProject) => {
   return createdProject;
 };
 
-export { getAll, createProject };
+const getProject = async (id) => {
+  const sql = connectToDatabase();
+  const project = await sql`
+    SELECT p.* FROM projects p
+    LEFT JOIN services s ON s.project_id = p.id
+    LEFT JOIN categories c ON c.id = p.category_id
+    WHERE p.id = ${id}
+  `;
+
+  return project;
+};
+
+export { getAll, createProject, getProject };

@@ -1,6 +1,6 @@
-import { getAll as getAllCategories } from "../models/categoriesModel.js";
+import { getAllCategories } from "../models/categoriesModel.js";
 
-const getAll = async (req, res) => {
+const listCategories = async (req, res) => {
   try {
     const categories = await getAllCategories();
     res.status(200).json(categories);
@@ -9,4 +9,4 @@ const getAll = async (req, res) => {
   }
 };
 
-export { getAll };
+export { listCategories };

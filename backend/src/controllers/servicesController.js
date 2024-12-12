@@ -1,15 +1,15 @@
-import { getProject } from "../models/projectsModel.js";
+import { getProjectById } from "../models/projectsModel.js";
 import {
-  createService as createServiceModel,
-  getService,
-  updateService as updateServiceModel,
+  createService,
+  getServiceById,
+  updateService,
 } from "../models/servicesModel.js";
 
-const createService = async (req, res) => {
+const addService = async (req, res) => {
   try {
     const service = req.body;
     console.log(service);
-    const createdService = await createServiceModel(service);
+    const createdService = await createService(service);
 
     res.status(201).json(createdService);
   } catch (error) {
@@ -17,18 +17,18 @@ const createService = async (req, res) => {
   }
 };
 
-const updateService = async (req, res) => {
+const modifyService = async (req, res) => {
   const serviceId = req.params.id;
   const service = req.body;
 
   const getProjectCost = async (projectId) => {
-    const [{ cost }] = await getProject(projectId);
+    const [{ cost }] = await getProjectById(projectId);
 
     return Number(cost);
   };
 
   const getPreviousServiceCost = async (serviceId) => {
-    const [{ cost }] = await getService(serviceId);
+    const [{ cost }] = await getServiceById(serviceId);
 
     return Number(cost);
   };
@@ -45,11 +45,7 @@ const updateService = async (req, res) => {
       projectCost = projectCost - (previousServiceCost - service.cost);
     }
 
-    const updatedService = await updateServiceModel(
-      serviceId,
-      service,
-      projectCost
-    );
+    const updatedService = await updateService(serviceId, service, projectCost);
 
     res.status(200).json(updatedService);
   } catch (error) {
@@ -57,4 +53,4 @@ const updateService = async (req, res) => {
   }
 };
 
-export { createService, updateService };
+export { addService, modifyService };

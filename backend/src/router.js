@@ -1,30 +1,27 @@
 import express from "express";
+import { listCategories } from "./controllers/categoriesController.js";
 import {
-  createProject,
-  getAll as getAllProjects,
-  getProject,
-  updateProject,
+  addProject,
+  listProjects,
+  fetchProject,
+  modifyProject,
 } from "./controllers/projectsController.js";
-import { getAll as getAllCategories } from "./controllers/categoriesController.js";
-import {
-  createService,
-  updateService,
-} from "./controllers/servicesController.js";
+import { addService, modifyService } from "./controllers/servicesController.js";
 
 const router = express.Router();
 
-router.get("/projects", getAllProjects);
+router.get("/projects", listProjects);
 
-router.post("/projects", createProject);
+router.post("/projects", addProject);
 
-router.get("/projects/:id", getProject);
+router.get("/projects/:id", fetchProject);
 
-router.put("/projects/:id", updateProject);
+router.put("/projects/:id", modifyProject);
 
-router.get("/categories", getAllCategories);
+router.get("/categories", listCategories);
 
-router.post("/services", createService);
+router.post("/services", addService);
 
-router.put("/services/:id", updateService);
+router.put("/services/:id", modifyService);
 
 export default router;

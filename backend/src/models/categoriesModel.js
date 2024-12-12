@@ -1,10 +1,9 @@
-import connectToDatabase from "../config/db.js";
+import sql from "../config/db.js";
 
-const getAll = async () => {
-  const sql = connectToDatabase();
+const getAllCategories = async () => {
   const categories = await sql`SELECT * FROM categories`;
 
   return categories;
 };
 
-export { getAll };
+export { getAllCategories };

@@ -1,11 +1,11 @@
 import {
-  getAll as getAllProjects,
-  createProject as createProjectModel,
-  getProject as getProjectModel,
-  updateProject as updateProjectModel,
+  getAllProjects,
+  createProject,
+  getProjectById,
+  updateProject,
 } from "../models/projectsModel.js";
 
-const getAll = async (_req, res) => {
+const listProjects = async (_req, res) => {
   try {
     const projects = await getAllProjects();
 
@@ -15,10 +15,10 @@ const getAll = async (_req, res) => {
   }
 };
 
-const createProject = async (req, res) => {
+const addProject = async (req, res) => {
   try {
     const project = req.body;
-    const createdProject = await createProjectModel(project);
+    const createdProject = await createProject(project);
 
     res.status(201).json(createdProject);
   } catch (error) {
@@ -26,10 +26,10 @@ const createProject = async (req, res) => {
   }
 };
 
-const getProject = async (req, res) => {
+const fetchProject = async (req, res) => {
   try {
     const id = req.params.id;
-    const project = await getProjectModel(id);
+    const project = await getProjectById(id);
 
     res.status(200).json(project);
   } catch (error) {
@@ -37,11 +37,12 @@ const getProject = async (req, res) => {
   }
 };
 
-const updateProject = async (req, res) => {
+const modifyProject = async (req, res) => {
+  const id = req.params.id;
+  const project = req.body;
+
   try {
-    const id = req.params.id;
-    const project = req.body;
-    const updatedProject = await updateProjectModel(id, project);
+    const updatedProject = await updateProject(id, project);
 
     res.status(200).json(updatedProject);
   } catch (error) {
@@ -49,4 +50,4 @@ const updateProject = async (req, res) => {
   }
 };
 
-export { getAll, createProject, getProject, updateProject };
+export { listProjects, addProject, fetchProject, modifyProject };

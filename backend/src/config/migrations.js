@@ -1,6 +1,6 @@
-import connectToDatabase from "./db.js";
+import sql from "./db.js";
 
-const sql = connectToDatabase();
+const sql = sql();
 
 const createTables = async () => {
   try {

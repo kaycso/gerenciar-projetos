@@ -3,14 +3,6 @@ import { neon } from "@neondatabase/serverless";
 
 dotenv.config();
 
-const connectToDatabase = () => {
-  try {
-    const sql = neon(process.env.DATABASE_URL);
-    console.log("conexão bem sucessida!");
-    return sql;
-  } catch (error) {
-    console.log(error);
-  }
-};
+const sql = neon(process.env.DATABASE_URL);
 
-export default connectToDatabase;
+export default sql;

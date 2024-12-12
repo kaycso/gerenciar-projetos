@@ -1,7 +1,6 @@
-import connectToDatabase from "../config/db.js";
+import sql from "../config/db.js";
 
 const createService = async (service) => {
-  const sql = connectToDatabase();
   const { project_id, title, description, cost } = service;
 
   const createdService = await sql`
@@ -19,8 +18,7 @@ const createService = async (service) => {
   return createdService;
 };
 
-const getService = async (id) => {
-  const sql = connectToDatabase();
+const getServiceById = async (id) => {
   const service = await sql`
     SELECT * FROM services
     WHERE id = ${id}
@@ -30,7 +28,6 @@ const getService = async (id) => {
 };
 
 const updateService = async (id, service, projectCost) => {
-  const sql = connectToDatabase();
   const { title, description, cost, project_id } = service;
 
   const updatedService = await sql`
@@ -49,4 +46,4 @@ const updateService = async (id, service, projectCost) => {
   return updatedService;
 };
 
-export { createService, updateService, getService };
+export { createService, updateService, getServiceById };

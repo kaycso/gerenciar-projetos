@@ -1,25 +1,24 @@
-import connectToDatabase from "../config/db.js";
+import sql from "../config/db.js";
 
-const getAll = async () => {
-  const sql = connectToDatabase();
+const getAllProjects = async () => {
   const projects = await sql`SELECT * FROM projects`;
 
   return projects;
 };
 
-const createProject = async (createProject) => {
-  const sql = connectToDatabase();
-  const { title, budget, category_id } = createProject;
+const createProject = async (projectData) => {
+  const { title, budget, category_id } = projectData;
 
-  const createdProject = await sql`
-    INSERT INTO projects(title, budget, category_id) VALUES (${title}, ${budget}, ${category_id})
+  const [createdProject] = await sql`
+    INSERT INTO projects(title, budget, category_id)
+    VALUES (${title}, ${budget}, ${category_id})
+    RETURNING *
   `;
 
   return createdProject;
 };
 
-const getProject = async (id) => {
-  const sql = connectToDatabase();
+const getProjectById = async (id) => {
   const project = await sql`
     SELECT p.* FROM projects p
     LEFT JOIN services s ON s.project_id = p.id
@@ -31,7 +30,6 @@ const getProject = async (id) => {
 };
 
 const updateProject = async (id, project) => {
-  const sql = connectToDatabase();
   const { title, budget, category_id } = project;
   const updatedProject = await sql`
     UPDATE projects
@@ -43,4 +41,4 @@ const updateProject = async (id, project) => {
   return updatedProject;
 };
 
-export { getAll, createProject, getProject, updateProject };
+export { getAllProjects, createProject, getProjectById, updateProject };

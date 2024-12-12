@@ -39,10 +39,17 @@ const fetchProject = async (req, res) => {
 
 const modifyProject = async (req, res) => {
   const id = req.params.id;
-  const project = req.body;
+  const projectData = req.body;
+
+  const previousProject = await getProjectById(id);
+  if (parseFloat(projectData.budget) < previousProject.budget) {
+    return res.status(400).json({
+      message: "O orçamento não pode ser maior que os gastos cadastrados",
+    });
+  }
 
   try {
-    const updatedProject = await updateProject(id, project);
+    const updatedProject = await updateProject(id, projectData);
 
     res.status(200).json(updatedProject);
   } catch (error) {

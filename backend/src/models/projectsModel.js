@@ -1,7 +1,27 @@
+import { parse } from "dotenv";
 import sql from "../config/db.js";
 
 const getAllProjects = async () => {
-  const projects = await sql`SELECT * FROM projects`;
+  const result = await sql`
+    SELECT p.*, c.name as category_name FROM projects p
+    INNER JOIN categories c ON c.id = p.category_id
+    ORDER BY id
+  `;
+
+  const projects = [];
+
+  result.forEach((row) => {
+    if (row.id) {
+      projects.push({
+        id: Number(row.id),
+        title: row.title,
+        budget: parseFloat(row.budget),
+        cost: parseFloat(row.cost),
+        category_id: Number(row.category_id),
+        category_name: row.category_name
+      });
+    }
+  });
 
   return projects;
 };

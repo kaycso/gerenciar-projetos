@@ -2,19 +2,28 @@ import { useEffect, useState } from "react";
 import FormField from "./FormField";
 import Button from "./ui/Button";
 import PropTypes from "prop-types";
+import { getCategories } from "../api/services/categoryServices";
 
 const ProjectForm = ({ projectInfo, handleSubmit, buttonText }) => {
   const [project, setProject] = useState({
-    name: projectInfo?.name || "",
+    title: projectInfo?.name || "",
     budget: projectInfo?.budget || "",
-    category: projectInfo?.category || "",
-    cost: projectInfo?.cost || 0,
-    services: projectInfo?.services || []
+    category_id: projectInfo?.category || "",
   });
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/categories", {
+    const fetchCategories = async () => {
+      try {
+        const data = await getCategories();
+        setCategories(data);
+      } catch (err) {
+        alert("Não foi possível carregar as categorias", err.message);
+      }
+    };
+
+    fetchCategories();
+    /* fetch("http://localhost:5000/categories", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -24,12 +33,12 @@ const ProjectForm = ({ projectInfo, handleSubmit, buttonText }) => {
       .then((data) => {
         setCategories(data);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err)); */
   }, []);
 
   const submit = (e) => {
     e.preventDefault();
-    if (!project.name || !project.budget || !project.category) {
+    if (!project.title || !project.budget || !project.category_id) {
       alert("Todos os campos devem ser preenchidos!");
       return;
     }
@@ -43,11 +52,11 @@ const ProjectForm = ({ projectInfo, handleSubmit, buttonText }) => {
         label="Nome do Projeto"
         type="text"
         placeholder="Insira o nome do projeto"
-        value={project.name}
+        value={project.title}
         onChange={(e) => {
           setProject((prevProject) => ({
             ...prevProject,
-            name: e.target.value,
+            title: e.target.value,
           }));
         }}
       />
@@ -60,7 +69,7 @@ const ProjectForm = ({ projectInfo, handleSubmit, buttonText }) => {
         onChange={(e) => {
           setProject((prevProject) => ({
             ...prevProject,
-            budget: Number(e.target.value),
+            budget: parseFloat(e.target.value),
           }));
         }}
       />
@@ -68,16 +77,16 @@ const ProjectForm = ({ projectInfo, handleSubmit, buttonText }) => {
         id="category"
         label="Categoria"
         type="select"
-        value={project.category}
+        value={project.category_id}
         onChange={(e) => {
           setProject((prevProject) => ({
             ...prevProject,
-            category: e.target.value,
+            category_id: e.target.value,
           }));
         }}
       >
         {categories.map((cat) => (
-          <option key={cat.id} value={cat.name}>
+          <option key={cat.id} value={cat.id}>
             {cat.name}
           </option>
         ))}

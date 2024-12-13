@@ -1,27 +1,21 @@
 import { useNavigate } from "react-router";
 import ProjectForm from "../components/ProjectForm";
+import { createProject } from "../api/services/projectServices";
 
 const NewProject = () => {
   const navigate = useNavigate();
 
-  const createPost = (project) => {
-    project.cost = 0;
-    project.services = [];
+  const createPost = async (projectData) => {
+    projectData.cost = 0;
 
-    fetch("http://localhost:5000/projects", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(project),
-    })
-      .then((resp) => resp.json())
-      .then((data) =>
-        navigate("/projects", {
-          state: { notification: "Projeto criado com sucesso!" },
-        }),
-      )
-      .catch((err) => console.log(err));
+    try {
+      await createProject(projectData);
+      navigate("/projects", {
+        state: { notification: "Projeto criado com sucesso!" },
+      });
+    } catch (err) {
+      alert("Ops, ocorreu um erro ao tentar criar o novo projeto", err);
+    }
   };
 
   return (

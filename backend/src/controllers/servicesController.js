@@ -1,6 +1,7 @@
 import { getProjectById } from "../models/projectsModel.js";
 import {
   createService,
+  deleteServiceById,
   getServiceById,
   updateService,
 } from "../models/servicesModel.js";
@@ -33,10 +34,19 @@ const modifyService = async (req, res) => {
 
   try {
     const [{ cost: previousServiceCost }] = await getServiceById(serviceId);
-    const { cost: projectCost } = await getProjectById(service.project_id);
+    const { cost: projectCost, budget: projectBudget } = await getProjectById(
+      service.project_id
+    );
 
-    const costDifference = Number(service.cost) - Number(previousServiceCost);
-    const updatedProjectCost = Number(projectCost) + costDifference;
+    const costDifference =
+      parseFloat(service.cost) - parseFloat(previousServiceCost);
+    const updatedProjectCost = parseFloat(projectCost) + costDifference;
+
+    if (updatedProjectCost > projectBudget) {
+      return res.status(400).json({
+        message: "Gasto total não pode ser maior que o orçamento do projeto!",
+      });
+    }
 
     const updatedService = await updateService(
       serviceId,
@@ -51,4 +61,15 @@ const modifyService = async (req, res) => {
   }
 };
 
-export { addService, modifyService };
+const removeService = async (req, res) => {
+  const serviceId = req.params.id;
+
+  try {
+    const deletedService = await deleteServiceById(serviceId);
+    res.status(200).json(deletedService);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export { addService, modifyService, removeService };

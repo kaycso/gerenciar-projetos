@@ -7,7 +7,11 @@ import {
   modifyProject,
   removeProject,
 } from "./controllers/projectsController.js";
-import { addService, modifyService } from "./controllers/servicesController.js";
+import {
+  addService,
+  modifyService,
+  removeService,
+} from "./controllers/servicesController.js";
 
 const router = express.Router();
 
@@ -26,5 +30,7 @@ router.get("/categories", listCategories);
 router.post("/services", addService);
 
 router.put("/services/:id", modifyService);
+
+router.delete("/services/:id", removeService);
 
 export default router;

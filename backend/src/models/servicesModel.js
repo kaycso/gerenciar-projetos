@@ -48,4 +48,27 @@ const updateService = async (id, service, projectCost) => {
   return updatedService;
 };
 
-export { createService, updateService, getServiceById };
+const deleteServiceById = async (id) => {
+  const [{ project_id, cost: projectCost }] = await sql`
+    SELECT project_id, cost FROM services
+    WHERE id = ${id}
+  `;
+
+  const numericProjectCost = parseFloat(projectCost);
+
+  const [deletedService, _] = await sql.transaction([
+    sql`
+      DELETE FROM services
+      WHERE id = ${id}
+    `,
+    sql`
+      UPDATE projects
+      SET cost = cost - ${numericProjectCost}
+      WHERE id = ${project_id}
+    `,
+  ]);
+
+  return deletedService;
+};
+
+export { createService, updateService, getServiceById, deleteServiceById };

@@ -44,7 +44,7 @@ const modifyProject = async (req, res) => {
   const projectData = req.body;
 
   const previousProject = await getProjectById(id);
-  if (parseFloat(projectData.budget) < previousProject.budget) {
+  if (parseFloat(projectData.budget) < previousProject.cost) {
     return res.status(400).json({
       message: "O orçamento não pode ser maior que os gastos cadastrados",
     });
@@ -64,10 +64,10 @@ const removeProject = async (req, res) => {
 
   try {
     const deletedProject = await deleteProjectById(projectId);
-    
+
     res.status(200).json(deletedProject);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };

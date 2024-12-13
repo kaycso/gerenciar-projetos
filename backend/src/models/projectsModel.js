@@ -10,8 +10,8 @@ const createProject = async (projectData) => {
   const { title, budget, category_id } = projectData;
 
   const [createdProject] = await sql`
-    INSERT INTO projects(title, budget, category_id)
-    VALUES (${title}, ${budget}, ${category_id})
+    INSERT INTO projects(title, budget, category_id, cost)
+    VALUES (${title}, ${budget}, ${category_id}, 0)
     RETURNING *
   `;
 
@@ -41,14 +41,18 @@ const getProjectById = async (id) => {
   };
 
   result.forEach((row) => {
-    const service = {
-      id: row.service_id,
-      title: row.service_title,
-      description: row.service_description,
-      cost: parseFloat(row.service_cost),
-    };
+    if (row.service_id !== null) {
+      const service = {
+        id: row.service_id,
+        title: row.service_title,
+        description: row.service_description,
+        cost: parseFloat(row.service_cost),
+      };
 
-    project.services.push(service);
+      project.services.push(service);
+    }
+
+    return;
   });
 
   return project;

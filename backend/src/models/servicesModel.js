@@ -3,17 +3,18 @@ import sql from "../config/db.js";
 const createService = async (service) => {
   const { project_id, title, description, cost } = service;
 
-  const createdService = await sql`
-    INSERT INTO services (title, description, cost, project_id)
-    VALUES (${title}, ${description}, ${cost}, ${project_id})
-    RETURNING *
-  `;
-
-  await sql`
-    UPDATE projects
-    SET cost = cost + ${cost}
-    WHERE id = ${project_id}
-  `;
+  const [createdService, _] = await sql.transaction([
+    sql`
+      INSERT INTO services (title, description, cost, project_id)
+      VALUES (${title}, ${description}, ${cost}, ${project_id})
+      RETURNING *
+    `,
+    sql`
+      UPDATE projects
+      SET cost = cost + ${cost}
+      WHERE id = ${project_id}
+    `,
+  ]);
 
   return createdService;
 };

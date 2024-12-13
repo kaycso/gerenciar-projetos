@@ -6,9 +6,19 @@ import {
 } from "../models/servicesModel.js";
 
 const addService = async (req, res) => {
+  const service = req.body;
+
+  const project = await getProjectById(service.project_id);
+  const projectCost = project.cost;
+  const newProjectCost = projectCost + service.cost;
+
+  if (newProjectCost > project.budget) {
+    return res
+      .status(400)
+      .json({ message: "Gastos totais não podem ultrapassar o orçamento!" });
+  }
+
   try {
-    const service = req.body;
-    console.log(service);
     const createdService = await createService(service);
 
     res.status(201).json(createdService);

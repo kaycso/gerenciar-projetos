@@ -31,18 +31,19 @@ const getServiceById = async (id) => {
 const updateService = async (id, service, projectCost) => {
   const { title, description, cost, project_id } = service;
 
-  const updatedService = await sql`
-    UPDATE services
-    SET title = ${title}, description = ${description}, cost = ${cost}
-    WHERE id = ${id}
-    RETURNING *
-  `;
-
-  await sql`
-    UPDATE projects
-    SET cost = ${projectCost}
-    WHERE id = ${project_id}
-  `;
+  const [updatedService, _] = await sql.transaction([
+    sql`
+      UPDATE services
+      SET title = ${title}, description = ${description}, cost = ${cost}
+      WHERE id = ${id}
+      RETURNING *
+    `,
+    sql`
+      UPDATE projects
+      SET cost = ${projectCost}
+      WHERE id = ${project_id}
+    `,
+  ]);
 
   return updatedService;
 };

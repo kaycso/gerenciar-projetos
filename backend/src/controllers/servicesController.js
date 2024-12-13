@@ -31,34 +31,22 @@ const modifyService = async (req, res) => {
   const serviceId = req.params.id;
   const service = req.body;
 
-  const getProjectCost = async (projectId) => {
-    const [{ cost }] = await getProjectById(projectId);
-
-    return Number(cost);
-  };
-
-  const getPreviousServiceCost = async (serviceId) => {
-    const [{ cost }] = await getServiceById(serviceId);
-
-    return Number(cost);
-  };
-
-  const previousServiceCost = await getPreviousServiceCost(serviceId);
-  let projectCost = await getProjectCost(service.project_id);
-
   try {
-    if (service.cost >= previousServiceCost) {
-      projectCost = projectCost + (service.cost - previousServiceCost);
-    }
+    const [{ cost: previousServiceCost }] = await getServiceById(serviceId);
+    const { cost: projectCost } = await getProjectById(service.project_id);
 
-    if (service.cost < previousServiceCost) {
-      projectCost = projectCost - (previousServiceCost - service.cost);
-    }
+    const costDifference = Number(service.cost) - Number(previousServiceCost);
+    const updatedProjectCost = Number(projectCost) + costDifference;
 
-    const updatedService = await updateService(serviceId, service, projectCost);
+    const updatedService = await updateService(
+      serviceId,
+      service,
+      updatedProjectCost
+    );
 
     res.status(200).json(updatedService);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };

@@ -6,9 +6,9 @@ import { Link } from "react-router";
 
 const ProjectCard = ({ id, name, budget, category, handleRemove }) => {
   const remove = (e) => {
-    e.preventDefault()
-    handleRemove(id)
-  }
+    e.preventDefault();
+    handleRemove(id);
+  };
 
   return (
     <div className="flex max-w-min flex-col gap-6 rounded border border-zinc-300 bg-white p-4 transition hover:shadow-md">
@@ -17,7 +17,8 @@ const ProjectCard = ({ id, name, budget, category, handleRemove }) => {
       </Link>
       <div className="flex flex-col gap-2">
         <p>
-          <span className="font-bold">Orçamento:</span> R$ {budget},00
+          <span className="font-bold">Orçamento:</span> R${" "}
+          {budget.toLocaleString("pt-Br")}
         </p>
         <div className="flex items-center gap-1">
           <FaCircle size={12} />
@@ -44,7 +45,7 @@ const ProjectCard = ({ id, name, budget, category, handleRemove }) => {
 };
 
 ProjectCard.propTypes = {
-  id: PropTypes.string,
+  id: PropTypes.number,
   name: PropTypes.string,
   budget: PropTypes.number,
   category: PropTypes.string,

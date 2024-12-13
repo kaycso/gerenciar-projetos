@@ -4,6 +4,10 @@ import Button from "../components/ui/Button";
 import { Link, useLocation, useNavigate } from "react-router";
 import Notification from "../components/Notification";
 import Loading from "../components/Loading";
+import {
+  getProjects,
+  deleteProjectById,
+} from "../api/services/projectServices";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -11,6 +15,7 @@ const Projects = () => {
   const navigate = useNavigate();
   const [notification, setNotification] = useState(null);
   const [removeLoading, setRemoveLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (location.state && location.state.notification) {
@@ -23,34 +28,34 @@ const Projects = () => {
   }, [location.state]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/projects", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
+    const fetchProjects = async () => {
+      try {
+        setRemoveLoading(false);
+        const data = await getProjects();
         setProjects(data);
+      } catch (err) {
+        setError(err.message);
+        console.log(error);
+      } finally {
         setRemoveLoading(true);
-      })
-      .catch((err) => console.log(err));
+      }
+    };
+
+    fetchProjects();
   }, []);
 
-  const removeProject = (id) => {
-    fetch(`http://localhost:5000/projects/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        setProjects(projects.filter((project) => project.id !== id));
-        setNotification("Projeto Removido com Sucesso!");
-        setTimeout(() => setNotification(null), 5000);
-      })
-      .catch((err) => console.log(err));
+  const removeProject = async (id) => {
+    try {
+      await deleteProjectById(id);
+      setProjects(projects.filter((project) => project.id !== id));
+      setNotification("Projeto Removido com Sucesso!");
+      setTimeout(() => setNotification(null), 5000);
+    } catch (err) {
+      setError(err);
+      setNotification(err.message);
+      setTimeout(() => setNotification(null), 5000);
+      console.log(err);
+    }
   };
 
   return (
@@ -69,9 +74,9 @@ const Projects = () => {
               <ProjectCard
                 key={project.id}
                 id={project.id}
-                name={project.name}
+                name={project.title}
                 budget={project.budget}
-                category={project.category}
+                category={project.category_name}
                 handleRemove={removeProject}
               />
             ))

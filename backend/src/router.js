@@ -5,6 +5,7 @@ import {
   listProjects,
   fetchProject,
   modifyProject,
+  removeProject,
 } from "./controllers/projectsController.js";
 import { addService, modifyService } from "./controllers/servicesController.js";
 
@@ -17,6 +18,8 @@ router.post("/projects", addProject);
 router.get("/projects/:id", fetchProject);
 
 router.put("/projects/:id", modifyProject);
+
+router.delete("/projects/:id", removeProject);
 
 router.get("/categories", listCategories);
 

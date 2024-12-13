@@ -1,8 +1,10 @@
+import e from "express";
 import {
   getAllProjects,
   createProject,
   getProjectById,
   updateProject,
+  deleteProjectById,
 } from "../models/projectsModel.js";
 
 const listProjects = async (_req, res) => {
@@ -57,4 +59,17 @@ const modifyProject = async (req, res) => {
   }
 };
 
-export { listProjects, addProject, fetchProject, modifyProject };
+const removeProject = async (req, res) => {
+  const projectId = req.params.id;
+
+  try {
+    const deletedProject = await deleteProjectById(projectId);
+    
+    res.status(200).json(deletedProject);
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export { listProjects, addProject, fetchProject, modifyProject, removeProject };

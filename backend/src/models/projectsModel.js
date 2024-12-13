@@ -66,4 +66,26 @@ const updateProject = async (id, project) => {
   return updatedProject;
 };
 
-export { getAllProjects, createProject, getProjectById, updateProject };
+const deleteProjectById = async (id) => {
+  const [_, deletedProject] = await sql.transaction([
+    sql`
+      DELETE FROM services
+      WHERE project_id = ${id}
+    `,
+    sql`
+      DELETE FROM projects
+      WHERE id = ${id}
+      RETURNING *
+    `,
+  ]);
+
+  return deletedProject;
+};
+
+export {
+  getAllProjects,
+  createProject,
+  getProjectById,
+  updateProject,
+  deleteProjectById,
+};

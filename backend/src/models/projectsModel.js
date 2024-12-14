@@ -18,7 +18,7 @@ const getAllProjects = async () => {
         budget: parseFloat(row.budget),
         cost: parseFloat(row.cost),
         category_id: Number(row.category_id),
-        category_name: row.category_name
+        category_name: row.category_name,
       });
     }
   });
@@ -72,7 +72,7 @@ const getProjectById = async (id) => {
       project.services.push(service);
     }
 
-    return;
+    return project;
   });
 
   return project;
@@ -80,12 +80,20 @@ const getProjectById = async (id) => {
 
 const updateProject = async (id, project) => {
   const { title, budget, category_id } = project;
-  const updatedProject = await sql`
+  const [result] = await sql`
     UPDATE projects
     SET title = ${title}, budget = ${budget}, category_id = ${category_id}
     WHERE id = ${id}
     RETURNING *
   `;
+
+  const updatedProject = {
+    id: result.id,
+    title: result.title,
+    budget: Number(result.budget),
+    cost: Number(result.cost),
+    category_id: result.category_id,
+  };
 
   return updatedProject;
 };

@@ -6,9 +6,9 @@ import { getCategories } from "../api/services/categoryServices";
 
 const ProjectForm = ({ projectInfo, handleSubmit, buttonText }) => {
   const [project, setProject] = useState({
-    title: projectInfo?.name || "",
+    title: projectInfo?.title || "",
     budget: projectInfo?.budget || "",
-    category_id: projectInfo?.category || "",
+    category_id: projectInfo?.category_id || "",
   });
   const [categories, setCategories] = useState([]);
 
@@ -23,17 +23,6 @@ const ProjectForm = ({ projectInfo, handleSubmit, buttonText }) => {
     };
 
     fetchCategories();
-    /* fetch("http://localhost:5000/categories", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        setCategories(data);
-      })
-      .catch((err) => console.error(err)); */
   }, []);
 
   const submit = (e) => {

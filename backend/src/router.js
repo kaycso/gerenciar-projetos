@@ -1,5 +1,8 @@
 import express from "express";
-import { listCategories } from "./controllers/categoriesController.js";
+import {
+  fetchCategory,
+  listCategories,
+} from "./controllers/categoriesController.js";
 import {
   addProject,
   listProjects,
@@ -26,6 +29,8 @@ router.put("/projects/:id", modifyProject);
 router.delete("/projects/:id", removeProject);
 
 router.get("/categories", listCategories);
+
+router.get("/categories/:id", fetchCategory);
 
 router.post("/services", addService);
 

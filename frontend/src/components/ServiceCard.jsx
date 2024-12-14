@@ -30,7 +30,7 @@ const ServiceCard = ({ id, name, cost, description, handleRemove }) => {
 };
 
 ServiceCard.propTypes = {
-  id: PropTypes.string,
+  id: PropTypes.number,
   name: PropTypes.string,
   cost: PropTypes.number,
   description: PropTypes.string,

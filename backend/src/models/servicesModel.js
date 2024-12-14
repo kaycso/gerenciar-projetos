@@ -45,6 +45,8 @@ const updateService = async (id, service, projectCost) => {
     `,
   ]);
 
+  console.log(updatedService);
+
   return updatedService;
 };
 

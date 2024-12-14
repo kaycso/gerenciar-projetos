@@ -18,7 +18,11 @@ const ProjectCard = ({ id, name, budget, category, handleRemove }) => {
       <div className="flex flex-col gap-2">
         <p>
           <span className="font-bold">Orçamento:</span> R${" "}
-          {budget.toLocaleString("pt-Br")}
+          {budget.toLocaleString("pt-BR", {
+            style: "decimal",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
         </p>
         <div className="flex items-center gap-1">
           <FaCircle size={12} />

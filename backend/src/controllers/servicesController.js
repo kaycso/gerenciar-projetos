@@ -20,7 +20,7 @@ const addService = async (req, res) => {
   }
 
   try {
-    const createdService = await createService(service);
+    const [createdService] = await createService(service);
 
     res.status(201).json(createdService);
   } catch (error) {
@@ -48,7 +48,7 @@ const modifyService = async (req, res) => {
       });
     }
 
-    const updatedService = await updateService(
+    const [updatedService] = await updateService(
       serviceId,
       service,
       updatedProjectCost

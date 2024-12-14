@@ -6,4 +6,13 @@ const getAllCategories = async () => {
   return categories;
 };
 
-export { getAllCategories };
+const getCategoryById = async (id) => {
+  const [category] = await sql`
+    SELECT * FROM categories
+    WHERE id = ${id}
+  `;
+
+  return category;
+};
+
+export { getAllCategories, getCategoryById };

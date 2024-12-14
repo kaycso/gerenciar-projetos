@@ -4,24 +4,40 @@ import Button from "./ui/Button";
 import PropTypes from "prop-types";
 
 const ServiceForm = ({ handleSubmit, buttonText }) => {
-  const [services, setServices] = useState({});
+  const [service, setService] = useState({
+    title: "",
+    cost: "",
+    description: "",
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setServices((prevState) => ({
+    setService((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    if (!services.name || !services.cost || !services.description) {
+
+    if (isNaN(parseFloat(service.cost)) || parseFloat(service.cost) <= 0) {
+      alert("Insira um custo válido!");
+      return;
+    }
+
+    if (!service.title || !service.cost || !service.description) {
       alert("Preencha todos os campos!");
       return;
     }
 
-    handleSubmit(services);
+    await handleSubmit(service);
+
+    setService({
+      title: "",
+      cost: "",
+      description: "",
+    });
   };
 
   return (
@@ -29,9 +45,9 @@ const ServiceForm = ({ handleSubmit, buttonText }) => {
       <FormField
         id="serviceName"
         type="text"
-        name="name"
+        name="title"
         label="Nome do serviço"
-        value={services.name}
+        value={service.title}
         placeholder="Insira o nome do serviço"
         onChange={handleChange}
       />
@@ -40,7 +56,7 @@ const ServiceForm = ({ handleSubmit, buttonText }) => {
         type="number"
         name="cost"
         label="Custo do serviço"
-        value={services.cost}
+        value={service.cost}
         placeholder="Insira o valor do serviço"
         onChange={handleChange}
       />
@@ -49,8 +65,8 @@ const ServiceForm = ({ handleSubmit, buttonText }) => {
         type="text"
         name="description"
         label="Descrição do serviço"
-        value={services.description}
-        placeholder="Insira o nome do serviço"
+        value={service.description}
+        placeholder="Insira a descrição do serviço"
         onChange={handleChange}
       />
       <Button>{buttonText}</Button>

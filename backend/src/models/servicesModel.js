@@ -1,35 +1,48 @@
 import sql from "../config/db.js";
+import { queryUpdateProjectCost } from "./projectsModel.js";
 
-const createService = async (service) => {
+const createService = async (service, newProjectCost) => {
   const { project_id, title, description, cost } = service;
+  const { query: queryString, values } = queryUpdateProjectCost(
+    project_id,
+    newProjectCost
+  );
 
-  const [createdService, _] = await sql.transaction([
+  const [[createdService], _] = await sql.transaction([
     sql`
       INSERT INTO services (title, description, cost, project_id)
       VALUES (${title}, ${description}, ${cost}, ${project_id})
       RETURNING *
     `,
-    sql`
-      UPDATE projects
-      SET cost = cost + ${cost}
-      WHERE id = ${project_id}
-    `,
+    sql(queryString, values),
   ]);
 
   return createdService;
 };
 
 const getServiceById = async (id) => {
-  const service = await sql`
+  const [result] = await sql`
     SELECT * FROM services
     WHERE id = ${id}
   `;
 
+  const service = {
+    id: result.id,
+    title: result.title,
+    project_id: result.project_id,
+    description: result.description,
+    cost: Number(result.cost),
+  };
+
   return service;
 };
 
-const updateService = async (id, service, projectCost) => {
+const updateService = async (id, service, newProjectCost) => {
   const { title, description, cost, project_id } = service;
+  const { query: queryString, values } = queryUpdateProjectCost(
+    project_id,
+    newProjectCost
+  );
 
   const [updatedService, _] = await sql.transaction([
     sql`
@@ -38,39 +51,40 @@ const updateService = async (id, service, projectCost) => {
       WHERE id = ${id}
       RETURNING *
     `,
-    sql`
-      UPDATE projects
-      SET cost = ${projectCost}
-      WHERE id = ${project_id}
-    `,
+    sql(queryString, values),
   ]);
-
-  console.log(updatedService);
 
   return updatedService;
 };
 
-const deleteServiceById = async (id) => {
-  const [{ project_id, cost: projectCost }] = await sql`
-    SELECT project_id, cost FROM services
-    WHERE id = ${id}
-  `;
-
-  const numericProjectCost = parseFloat(projectCost);
+const deleteServiceById = async (serviceData, updatedProjectCost) => {
+  const { query: queryString, values } = queryUpdateProjectCost(
+    serviceData.project_id,
+    updatedProjectCost
+  );
 
   const [deletedService, _] = await sql.transaction([
     sql`
       DELETE FROM services
-      WHERE id = ${id}
+      WHERE id = ${serviceData.id}
     `,
-    sql`
-      UPDATE projects
-      SET cost = cost - ${numericProjectCost}
-      WHERE id = ${project_id}
-    `,
+    sql(queryString, values),
   ]);
 
   return deletedService;
 };
 
-export { createService, updateService, getServiceById, deleteServiceById };
+const queryDeleteServicesByProjectId = async (projectId) => {
+  const query = "DELETE FROM services WHERE project_id = $1";
+  const value = [projectId];
+
+  return { query, value };
+};
+
+export {
+  createService,
+  updateService,
+  getServiceById,
+  deleteServiceById,
+  queryDeleteServicesByProjectId,
+};

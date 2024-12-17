@@ -1,5 +1,5 @@
-import { parse } from "dotenv";
 import sql from "../config/db.js";
+import { queryDeleteServicesByProjectId } from "./servicesModel.js";
 
 const getAllProjects = async () => {
   const result = await sql`
@@ -99,11 +99,12 @@ const updateProject = async (id, project) => {
 };
 
 const deleteProjectById = async (id) => {
+  const { query: queryString, value } = await queryDeleteServicesByProjectId(
+    id
+  );
+
   const [_, deletedProject] = await sql.transaction([
-    sql`
-      DELETE FROM services
-      WHERE project_id = ${id}
-    `,
+    sql(queryString, value),
     sql`
       DELETE FROM projects
       WHERE id = ${id}
@@ -114,10 +115,32 @@ const deleteProjectById = async (id) => {
   return deletedProject;
 };
 
+const validateProjectBudget = async (projectId, newCost) => {
+  const [{ budget: projectBudget }] = await sql`
+    SELECT * FROM projects
+    WHERE id = ${projectId}
+  `;
+
+  if (newCost > projectBudget) {
+    return false;
+  }
+
+  return true;
+};
+
+const queryUpdateProjectCost = (projectId, newCost) => {
+  const query = "UPDATE projects SET cost = $1 WHERE id = $2";
+  const values = [newCost, projectId];
+
+  return { query, values };
+};
+
 export {
   getAllProjects,
   createProject,
   getProjectById,
   updateProject,
   deleteProjectById,
+  validateProjectBudget,
+  queryUpdateProjectCost,
 };
